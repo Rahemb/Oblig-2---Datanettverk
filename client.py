@@ -1,6 +1,6 @@
 from socket import *
 
-serverName = "10.0.0.2"  
+serverName = "10.0.2.2"  
 serverPort = 6789  # Same port as the web server
 
 clientSocket = socket(AF_INET, SOCK_STREAM)
