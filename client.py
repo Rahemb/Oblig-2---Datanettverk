@@ -1,15 +1,23 @@
 from socket import *
+import argparse
 
-serverName = "10.0.2.2"  
-serverPort = 6789  # Same port as the web server
+# Parser for kommandolinjeargumenter
+parser = argparse.ArgumentParser(description='Simple HTTP Client')
+parser.add_argument('-i', '--ip', required=True, help='Server IP address')
+parser.add_argument('-p', '--port', type=int, required=True, help='Server port number')
+parser.add_argument('-f', '--file', required=True, help='File to request (e.g., index.html)')
+args = parser.parse_args()
 
+# Opprette TCP socket
 clientSocket = socket(AF_INET, SOCK_STREAM)
-clientSocket.connect((serverName, serverPort))  # Connect to server
+clientSocket.connect((args.ip, args.port))
 
-request = "GET /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n"
-clientSocket.send(request.encode())  # Send request
+# Lage og sende HTTP GET-forespørsel
+request = f"GET /{args.file} HTTP/1.1\r\nHost: {args.ip}\r\n\r\n"
+clientSocket.send(request.encode())
 
-response = clientSocket.recv(4096)  # Receive response
-print("Server response:\n", response.decode())  # Print response
+# Motta og vise respons
+response = clientSocket.recv(4096)
+print("Server response:\n", response.decode())
 
-clientSocket.close()  # Close connection
+clientSocket.close()
